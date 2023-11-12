@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #e44d26;
+            font-size: 36px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #e44d26;
+            margin-top: 10px;
+        }
+
+        h2 {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .column {
+            flex: 1;
+        }
+
+        img {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            width: 100%;
+            max-width: 200px;
+            max-height: 200px; /* Adjust the max-height as needed */
+            height: auto;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-details {
+            text-align: left;
+            margin-top: 20px;
+            max-width: 400px;
+        }
+
+        .item-details p {
+            line-height: 1.5;
+        }
+
+        .comment-section {
+            margin-top: 20px;
+            max-width: 400px;
+        }
+
+        .comment-section form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* Align the form items to the right */
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: auto;
+            align-self: flex-end; /* Align the button to the right */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .sentiment {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .column {
+            flex: 1;
+        }
+        
+        .sentiment-plot {
+            max-width: 75%; /* Ensure the image does not exceed its container's width */
+            max-height: 200px; /* Set a maximum height for the sentiment plot image */
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .sentiment-intro {
+            color: #333;  /* Adjust the color as needed */
+        }
+        
+        .positive {
+            color: #4CAF50;  /* Green color for positive sentiment */
+        }
+        
+        .negative {
+            color: #e44d26;  /* Red color for negative sentiment */
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Bismillah Bazar London</h1>
+
+        <!-- Image and item details in one row -->
+        <div class="row">
+            <div class="column">
+                <img src="{% static 'web_app/images/rice.jpg' %}" alt="Rice Image">
+            </div>
+
+            <div class="column item-details">
+                <h2>Rani Basmati Rice</h2>
+                <p><strong>Weight:</strong> 3lb</p>
+                <p><strong>Price:</strong> $19.99</p>
+                <p><strong>Description:</strong> This is a high-quality rice product.</p>
+                <p><strong>In Stock:</strong> Yes</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="column">
+                <div class="comment-section">
+                    <form method="post" action="{% url 'product_page' %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="Submit Comment">
+                    </form>
+                </div>
+            </div>
+
+            <!-- Display Sentiment (Assuming it's available in the context) -->
+            <div class="column">
+                {% if sentiment %}
+                    <p class="sentiment-intro">
+                        Our model predicts the sentiment of the comment as:
+                        <strong class="{% if sentiment == 'Positive' %}positive{% else %}negative{% endif %}">
+                            {{ sentiment }}
+                        </strong>
+                    </p>
+                {% endif %}
+
+                <!-- Display Sentiment Plot Image (Assuming it's available in the context) -->
+                {% if image_base64 %}
+                    <img class="sentiment-plot" src="data:image/png;base64,{{ image_base64 }}" alt="Sentiment Prediction Plot">
+                {% endif %}
+            </div>
+
+
+            
+        </div>
+    </div>
+
+</body>
+</html>
+{% endblock %}

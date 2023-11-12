@@ -1,0 +1,38 @@
+<!-- comment_history.html -->
+
+{% extends 'base.html' %} {# Assuming you have a base template #}
+{% block content %}
+
+<div class="card">
+    <h1>Comment History Dashboard</h1>
+
+    {% if comments %}
+    <table class="comment-table">
+        <thead>
+            <tr>
+                <th>Comment Text</th>
+                <th>Sentiment</th>
+                <th>Positive Probability</th>
+                <th>Negative Probability</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in comments %}
+            <tr>
+                <td>{{ comment.comment_text }}</td>
+                <td class="{% if comment.sentiment == 'Positive' %}positive{% else %}negative{% endif %}">{{ comment.sentiment }}</td>
+                <td>{{ comment.probability_positive }}</td>
+                <td>{{ comment.probability_negative }}</td>
+                <td>{{ comment.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No comments available.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
